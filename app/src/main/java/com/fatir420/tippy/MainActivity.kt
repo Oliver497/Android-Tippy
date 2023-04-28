@@ -69,6 +69,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun computeTipAndTotal() {
+//        this text is empty, clear out values and return (so nothing else is executed)
+        if (etBaseAmount.text.isEmpty()) {
+            tvTipAmount.text = ""
+            tvTotalAmount.text = ""
+            return
+        }
 //        1. Get the value of the base and tip percent
         val baseAmount = etBaseAmount.text.toString().toDouble() // we need a double
         val tipPercent = seekBarTip.progress
@@ -76,7 +82,8 @@ class MainActivity : AppCompatActivity() {
         val tipAmount = baseAmount * tipPercent / 100
         val totalAmount = baseAmount + tipAmount
 //        3. Update the UI
-        tvTipAmount.text = tipAmount.toString()
-        tvTotalAmount.text = totalAmount.toString()
+//          - give me only two decimal places
+        tvTipAmount.text = "%2f".format(tipAmount)
+        tvTotalAmount.text = "%2f".format(totalAmount)
     }
 }
