@@ -1,5 +1,6 @@
 package com.fatir420.tippy
 
+import android.animation.ArgbEvaluator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -8,6 +9,7 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 // class name
 private const val TAG = "MainActivity"
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tvTipPercentageLabel: TextView
     private lateinit var tvTipAmount: TextView
     private lateinit var tvTotalAmount: TextView
-
+    private lateinit var tvTipDescription: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +32,11 @@ class MainActivity : AppCompatActivity() {
         tvTipPercentageLabel = findViewById(R.id.tvTipPercent)
         tvTipAmount = findViewById(R.id.tvTipAmount)
         tvTotalAmount = findViewById(R.id.tvTotalAmount)
+        tvTipDescription = findViewById(R.id.tvTipDescription)
 
         seekBarTip.progress = INITIAL_TIP_PERCENT
         tvTipPercentageLabel.text = "$INITIAL_TIP_PERCENT%"
+
         seekBarTip.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
 //                every time progress changed on a seekBar, (user is scrubbing)
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
 //                tvTipPercentageLabel.text = progress.toString() me
                 tvTipPercentageLabel.text = "$progress%"
                 computeTipAndTotal()
+                updateTipDescription(progress)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
@@ -61,10 +66,31 @@ class MainActivity : AppCompatActivity() {
                 Log.i(TAG, "afterTextChanged $s")
                 computeTipAndTotal()
             }
-
         })
+    }
 
+    private fun updateTipDescription(tipPercent: Int) {
+        // check if tipPercent is not an INT
 
+        val tipDescription: String = when (tipPercent) {
+            in 0..9 -> "Poor"
+            in 10..14 -> "Acceptable"
+            in 15..19 -> "Good"
+            in 20..24 -> "Great"
+            else -> "Amazing"
+        }
+        // check if tipDescription is not String
+
+        tvTipDescription.text = tipDescription
+//        update tipDescription based on tipPercent
+//        compute a color based off of an Integer: Interpolation
+        val color = ArgbEvaluator().evaluate(
+//            tipPercent<int> to <float> = 0.0 / seekBarTip.max = 30
+            tipPercent.toFloat() / seekBarTip.max,
+            ContextCompat.getColor(this, R.color.color_worst_tip),
+            ContextCompat.getColor(this, R.color.color_best_tip)
+        ) as Int
+        tvTipDescription.setTextColor(color)
 
     }
 
@@ -87,3 +113,4 @@ class MainActivity : AppCompatActivity() {
         tvTotalAmount.text = "%2f".format(totalAmount)
     }
 }
+
