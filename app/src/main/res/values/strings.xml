@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Tippy</string>
+    <string name="txt_base">Base</string>
+    <string name="txt_24_per">24%</string>
+    <string name="txt_tip">Tip</string>
+    <string name="txt_total">Total</string>
+    <string name="txt_bill_amount">Bill Amount</string>
+    <string name="txt_tip_amount">19.96</string>
+    <string name="txt_totalAmount">103.11</string>
+</resources>
