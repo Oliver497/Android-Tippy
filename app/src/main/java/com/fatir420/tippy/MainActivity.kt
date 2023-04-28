@@ -114,3 +114,9 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+/*
+    Extensions to this basic tippy calculator:
+    1) Split bill by in users total and divide evenly by total users
+    2) Round the final amount up or down
+    3) Change the design up
+ */
